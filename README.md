@@ -1,4 +1,4 @@
 Saphire
 =======
 
-A scripting language for micro-controllers, esp. Arduino.
+A high level programming language with syntax similar to that of Ruby, which compiles to C++.
