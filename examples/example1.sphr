@@ -11,7 +11,7 @@ class Klass
   @@class_var = 0
   
   def initialize
-    instance_var = 'hello"
+    instance_var = 'hello'
   end
   
   def method
