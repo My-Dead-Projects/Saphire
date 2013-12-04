@@ -1,0 +1,25 @@
+
+def main
+  obj = Klass.new
+  obj.method
+  obj.method(0,5)
+end
+ 
+class Klass
+  
+  @instance_var
+  @@class_var = 0
+  
+  def initialize
+    instance_var = 'hello"
+  end
+  
+  def method
+  
+  end
+  
+  def method(x,y)
+  
+  end
+  
+end
