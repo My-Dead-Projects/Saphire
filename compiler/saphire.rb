@@ -1,18 +1,9 @@
 
-# globals
-$
-
 def load_file(path)
   $lines = []
   file = File.open(path, 'r')
   while line = file.gets
     $lines << line
-  end
-end
-
-def print_file
-  $lines.each_with_index do |line, i|
-    print i+1, ' '; puts line
   end
 end
 
