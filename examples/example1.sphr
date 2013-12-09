@@ -14,12 +14,7 @@ class Klass
     instance_var = 'hello'
   end
   
-  def method
+  def some_method
   
   end
-  
-  def method(x,y)
-  
-  end
-  
 end

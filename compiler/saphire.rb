@@ -3,11 +3,15 @@ require_relative 'definition'
 
 # load file
 $lines = []
-$main = Def.new(:class, "Main")
+
 file = File.open('../examples/example1.sphr', 'r')
 while line = file.gets
   $lines << line
 end
+
+$main = Def.new(:class, "Main")
+$main.start = 0
+$main.end = $lines.length-1
 
 # tokenize
 $lines.each_with_index do |line, i|
@@ -22,18 +26,26 @@ def print_all
   puts
 end
 
-$lines.each_with_index do |line, i|
-  if line[0] == 'class'
-    type = :class
-  elsif line[0] == 'def'
-    type = :method
-  else
-    type = nil
-  end
-  if type
-    $main.hash[line[1]] = Def.new(type, line[1])
-    $main.hash[line[1]].start = i
+def parse
+  stack = [$main]
+
+  $lines.each_with_index do |line, i|
+    if line[0] == 'class'
+      type = :class
+    elsif line[0] == 'def'
+      type = :method
+    elsif line[0] == 'end'
+      stack.pop.end = i
+    end
+    if type
+      definition = Def.new(type, line[1])
+      definition.start = i
+      stack.last.hash[line[1]] = definition
+      stack.push definition
+    end
   end
 end
+
+parse
 
 p $main
