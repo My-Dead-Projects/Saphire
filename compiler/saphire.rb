@@ -48,4 +48,13 @@ end
 
 parse
 
-p $main
+def print_def(d)
+  puts "#{d.type.to_s}: #{d.identifier}"
+  puts "start:#{d.start}"
+  puts "end:#{d.end}"
+  d.hash.each do |key, value|
+    print_def(value)
+  end
+end
+
+print_def $main

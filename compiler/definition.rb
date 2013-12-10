@@ -1,9 +1,9 @@
 
 class Definition
-  attr_accessor :start, :end, :type, :symbol, :hash, :code
-  def initialize(type=nil, symbol=nil, hash={})
+  attr_accessor :start, :end, :type, :identifier, :hash, :code
+  def initialize(type=nil, identifier=nil, hash={})
     @type = type
-    @symbol = symbol
+    @identifier = identifier
     @hash = hash
   end
 end
