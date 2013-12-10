@@ -5,6 +5,7 @@ class Definition
     @type = type
     @identifier = identifier
     @hash = hash
+    @code = []
   end
 end
 Def = Definition

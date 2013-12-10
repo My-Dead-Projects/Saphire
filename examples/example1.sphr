@@ -1,8 +1,6 @@
-
 def main
   obj = Klass.new
-  obj.method
-  obj.method(0,5)
+  obj.some_method
 end
  
 class Klass

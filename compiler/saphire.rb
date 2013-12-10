@@ -36,6 +36,8 @@ def parse
       type = :method
     elsif line[0] == 'end'
       stack.pop.end = i
+    else
+      stack.last.code << line
     end
     if type
       definition = Def.new(type, line[1])
@@ -48,13 +50,15 @@ end
 
 parse
 
-def print_def(d)
-  puts "#{d.type.to_s}: #{d.identifier}"
-  puts "start:#{d.start}"
-  puts "end:#{d.end}"
-  d.hash.each do |key, value|
-    print_def(value)
+def print_def(d, indent=0, indent_style='|  ')
+  puts "#{indent_style*indent}#{d.type.to_s} #{d.identifier}:#{d.start+1}"
+  d.code.each do |line|
+    puts "#{indent_style*(indent+1)}#{line.inspect}" unless line.size == 0
   end
+  d.hash.each do |key, value|
+    print_def(value, indent+1, indent_style)
+  end
+  puts "#{indent_style*indent}end:#{d.end+1}"
 end
 
 print_def $main
