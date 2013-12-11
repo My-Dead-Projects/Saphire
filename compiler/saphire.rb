@@ -1,6 +1,5 @@
 
 require_relative 'definition'
-require 'ruby-debug'
 
 # load file
 $lines = []
@@ -97,4 +96,23 @@ def print_def(d, line_numbers=false, indent=0, indent_style='|  ')
   puts
 end
 
-print_def $main
+def compile(c, f, pad=0)
+  case c.type
+    when :class
+      f.puts "#{' '*pad}class #{c.id} : id {"
+      c.hash.each do |_, e|
+        compile(e, f, pad+2)
+      end
+      f.puts "#{' '*pad}};"
+    when :method
+      f.puts "#{' '*pad}id #{c.id}(Array args) {"
+      f.puts "#{' '*(pad+2)}"
+      f.puts "#{' '*pad}}"
+  end
+end
+
+compile $main, STDOUT
+
+File.open('../examples/example1.cpp', 'w') do |file|
+  compile $main, file
+end

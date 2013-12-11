@@ -2,6 +2,7 @@
 #define SAPHIRE_H
 
 #include <string>
+#include <vector>
 #include <exception>
 
 class id {
@@ -27,6 +28,14 @@ public:
 class Real {
 public:
   double val;
+};
+
+class Array {
+  std::vector<id> vec;
+public:
+  id& operator[](long i) {
+    return vec[i];
+  }
 };
 
 class NilClass : id {

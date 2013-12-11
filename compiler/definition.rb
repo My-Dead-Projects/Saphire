@@ -24,6 +24,7 @@ class MethodCall < CodeElement
   attr_accessor :arguments
   def initialize(id, arguments=[])
     super(id)
+    @arguments = arguments
   end
 end
 
