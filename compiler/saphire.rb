@@ -1,5 +1,6 @@
 
 require_relative 'definition'
+require 'ruby-debug'
 
 # load file
 $lines = []
@@ -37,6 +38,30 @@ def parse
     elsif line[0] == 'end'
       stack.pop.end = i
     else
+      n_line = []
+      line.each_with_index do |token, j|
+        tok = token.split /\./
+        t = tok.shift
+        if (t =~ /[+\-=\/]/) == 0
+          n_line << Operator.new(t)
+        elsif (t =~ /@@/) == 0
+          t = t[0][2..-1]
+          n_line << ClassVariable.new(t)
+        elsif (t =~ /@/) == 0
+          t[0] = t[0][1..-1]
+          n_line << InstanceVariable.new(t)
+        elsif (t =~ /[a-zA-Z_]\w*/) == 0
+          n_line << ScopedVariable.new(t)
+        elsif (t =~ /\d+/) == 0
+          n_line << NumericLiteral.new(t)
+        elsif (t =~ /'/) == 0
+          n_line << StringLiteral.new(t[1..-2])
+        end
+        tok.each do |m|
+          n_line << MethodCall.new(m)
+        end
+        line = n_line
+      end
       stack.last.code << line
     end
     if type
@@ -50,15 +75,26 @@ end
 
 parse
 
-def print_def(d, indent=0, indent_style='|  ')
-  puts "#{indent_style*indent}#{d.type.to_s} #{d.identifier}:#{d.start+1}"
+def print_def(d, line_numbers=false, indent=0, indent_style='|  ')
+  puts "#{indent_style*indent}"
+  print "#{indent_style*indent}#{d.type.to_s} #{d.id}"
+  print ":#{d.start+1}" if line_numbers
+  puts
   d.code.each do |line|
-    puts "#{indent_style*(indent+1)}#{line.inspect}" unless line.size == 0
+    unless line.size == 0
+      print "#{indent_style*(indent+1)}"
+      line.each do |token|
+        print "#{token.inspect} "
+      end
+      puts
+    end
   end
   d.hash.each do |key, value|
-    print_def(value, indent+1, indent_style)
+    print_def(value, line_numbers, indent+1, indent_style)
   end
-  puts "#{indent_style*indent}end:#{d.end+1}"
+  print "#{indent_style*indent}end"
+  print ":#{d.end+1}" if line_numbers
+  puts
 end
 
 print_def $main
